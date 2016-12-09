@@ -21,13 +21,20 @@ function checkOnlineStatus() {
 }
 
 function randomMovement() {
-  setTimeout(randomMovement, 500); 
+  if (systemOnline) {
+    setTimeout(randomMovement, 700); 
+  } else {
+    // If we are offline generate more activity
+    setTimeout(randomMovement, 100); 
+  }
   
   if (!displayConnected) {
     return;
   }
   
   port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
+  
+  port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + '*');
 }
 
 
