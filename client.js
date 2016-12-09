@@ -1,6 +1,6 @@
 var SerialPort = require("serialport");
-
-var socket = require('socket.io/node_modules/socket.io-client')('http://display.arthurguy.co.uk:3000');
+var isOnline   = require('is-online');
+var socket     = require('socket.io/node_modules/socket.io-client')('http://display.arthurguy.co.uk:3000');
 
 var port = new SerialPort("/dev/ttyAMA0", {
   baudRate: 115200
