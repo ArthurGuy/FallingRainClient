@@ -21,7 +21,7 @@ function checkOnlineStatus() {
 }
 
 function randomMovement() {
-  setTimeout(randomMovement, 300); 
+  setTimeout(randomMovement, 500); 
   
   if (!displayConnected) {
     return;
