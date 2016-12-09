@@ -14,10 +14,10 @@ var displayConnected = false;
 
 // Monitor the internet connection to see if we are online
 function checkOnlineStatus(){ 
-	isOnline(function(err, online) {
-		systemOnline = online;
-		setTimeout(checkOnlineStatus, 1000); 
-	});	
+  isOnline(function(err, online) {
+    systemOnline = online;
+    setTimeout(checkOnlineStatus, 1000); 
+  });	
 }
 
 
@@ -49,17 +49,17 @@ function init() {
   // Listen for websocket messages
   
   socket.on('connect', function(){
-		console.log('A socket connection was made');
-		socket.emit('display-connected', {}); 
-	});
+    console.log('A socket connection was made');
+    socket.emit('display-connected', {}); 
+  });
   
   socket.on('new-data', function(data){
       var msg = '*S:' + data.x + ',' + data.y + '*';
       port.write(msg, function(err) {
-            if (err) {
-                return console.log('Error on write: ', err.message);
-            }
-            console.log('new pixel update sent');
+          if (err) {
+              return console.log('Error on write: ', err.message);
+          }
+          //console.log('new pixel update sent');
       });
       console.log(data);
   });
