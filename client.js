@@ -28,12 +28,12 @@ port.on('error', function(err) {
 socket.on('connect', function () {
     console.log('A socket connection was made');
     socket.on('new-data', function(msg){
-        port.write(data.message, function(err) {
+        port.write(msg, function(err) {
             if (err) {
                 return console.log('Error on write: ', err.message);
             }
             console.log('message written');
         });
-        console.log(data.message);
+        console.log(msg);
     });
 });
