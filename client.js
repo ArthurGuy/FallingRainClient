@@ -21,6 +21,8 @@ function checkOnlineStatus() {
 }
 
 function randomMovement() {
+  setTimeout(randomMovement, 100); 
+  
   if (!displayConnected) {
     return;
   }
@@ -32,7 +34,7 @@ function randomMovement() {
 function init() {
   checkOnlineStatus();
   
-  setTimeout(randomMovement, 100); 
+  randomMovement();
   
   // Connect to the serial port
   port.on('open', function() {
