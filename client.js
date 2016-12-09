@@ -32,7 +32,7 @@ socket.on('connect', function () {
             if (err) {
                 return console.log('Error on write: ', err.message);
             }
-            console.log('message written');
+            console.log('new pixel update sent');
         });
         console.log(msg);
     });
