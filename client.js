@@ -16,7 +16,7 @@ var displayConnected = false;
 function checkOnlineStatus(){ 
 	isOnline(function(err, online) {
 		systemOnline = online;
-		setTimeout(startInternetChecks, 1000); 
+		setTimeout(checkOnlineStatus, 1000); 
 	});	
 }
 
