@@ -27,13 +27,14 @@ port.on('error', function(err) {
 
 socket.on('connect', function () {
     console.log('A socket connection was made');
-    socket.on('new-data', function(msg){
+    socket.on('new-data', function(data){
+      var msg = '*S:' + data.x + ',' + data.y + '*';
         port.write(msg, function(err) {
             if (err) {
                 return console.log('Error on write: ', err.message);
             }
             console.log('new pixel update sent');
         });
-        console.log(msg);
+        console.log(data);
     });
 });
