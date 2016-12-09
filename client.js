@@ -13,16 +13,26 @@ var systemOnline = false;
 var displayConnected = false;
 
 // Monitor the internet connection to see if we are online
-function checkOnlineStatus(){ 
+function checkOnlineStatus() { 
   isOnline(function(err, online) {
     systemOnline = online;
     setTimeout(checkOnlineStatus, 1000); 
   });	
 }
 
+function randomMovement() {
+  if (!displayConnected) {
+    return;
+  }
+  
+  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
+}
+
 
 function init() {
   checkOnlineStatus();
+  
+  setTimeout(randomMovement, 100); 
   
   // Connect to the serial port
   port.on('open', function() {
@@ -67,3 +77,10 @@ function init() {
 }
 
 init();
+
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
