@@ -16,13 +16,19 @@ var displayConnected = false;
 function checkOnlineStatus() { 
   isOnline(function(err, online) {
     systemOnline = online;
-    setTimeout(checkOnlineStatus, 1000); 
+    if (systemOnline) {
+      // If online lets only check every 5 seconds
+      setTimeout(checkOnlineStatus, 5000); 
+    } else {
+      // If we are offline lets check a bit more frequently
+      setTimeout(checkOnlineStatus, 1000); 
+    }
   });	
 }
 
 function randomMovement() {
   if (systemOnline) {
-    setTimeout(randomMovement, 700); 
+    setTimeout(randomMovement, 800); 
   } else {
     // If we are offline generate more activity
     setTimeout(randomMovement, 100); 
@@ -32,8 +38,10 @@ function randomMovement() {
     return;
   }
   
+  // Start a pixel falling on a random column
   port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
   
+  // Trigger an explosion on a random pixel
   port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + '*');
 }
 
