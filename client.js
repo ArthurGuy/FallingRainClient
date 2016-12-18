@@ -31,7 +31,9 @@ function randomMovement() {
     setTimeout(randomMovement, 800); 
   } else {
     // If we are offline generate more activity
-    setTimeout(randomMovement, 100); 
+    setTimeout(randomMovement, 100);
+    
+    port.write('*M:Offline*');
   }
   
   if (!displayConnected) {
@@ -63,6 +65,8 @@ function init() {
       port.write('*S:5,0*');
       port.write('*S:6,0*');
       port.write('*S:7,0*');
+    
+      port.write('*M:Connected*');
 
       displayConnected = true;
   });
