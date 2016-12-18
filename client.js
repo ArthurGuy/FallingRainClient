@@ -32,8 +32,6 @@ function randomMovement() {
   } else {
     // If we are offline generate more activity
     setTimeout(randomMovement, 100);
-    
-    port.write('*M:Offline*');
   }
   
   if (!displayConnected) {
@@ -69,6 +67,10 @@ function init() {
       port.write('*M:Connected*');
 
       displayConnected = true;
+    
+      setTimeout(function () {
+        port.write('*M:ArthurGuy*');
+      }, 5000);
   });
 
   // open errors will be emitted as an error event
