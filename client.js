@@ -39,7 +39,7 @@ function randomMovement() {
   }
   
   // Start a pixel falling on a random column
-  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
+  //port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
   
   // Trigger an explosion on a random pixel
   port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + '*');
