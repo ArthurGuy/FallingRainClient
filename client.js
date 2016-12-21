@@ -69,7 +69,7 @@ function init() {
       displayConnected = true;
     
       setTimeout(function () {
-        port.write('*M:ArthurGuy*');
+        port.write('*M:Merry Christmas*');
       }, 5000);
   });
 
