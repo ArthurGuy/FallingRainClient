@@ -69,7 +69,7 @@ function init() {
       displayConnected = true;
     
       setTimeout(function () {
-        port.write('*M: *');
+        port.write('*M:AG*');
       }, 5000);
   });
 
