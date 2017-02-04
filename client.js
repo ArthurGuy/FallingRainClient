@@ -88,7 +88,25 @@ function init() {
   });
   
   socket.on('new-data', function(data){
-      var msg = '*' + data.type + ':' + data.message + '*';
+    
+      var msg;
+    
+      // If we have received a text message validate the characters are in a suitable range
+      if (data.type == 'M') {
+          if (!isASCII(data.message)) {
+              return;
+          }
+        if (data.message.length > 15) {
+          return;
+        }
+        
+        msg = '*M:' + data.message + '*';
+      } elseif (data.type == 'S') {
+        msg = '*S:' + data.x + ',' + data.y + '*';
+      } elseif (data.type == 'E') {
+        msg = '*E:' + data.x + ',' + data.y + '*';
+      }
+    
       port.write(msg, function(err) {
           if (err) {
               return console.log('Error on write: ', err.message);
@@ -107,4 +125,8 @@ function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function isASCII(str) {
+    return /^[\x00-\x7F]*$/.test(str);
 }
