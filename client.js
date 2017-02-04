@@ -12,6 +12,9 @@ var systemOnline = false;
 // Is the teensy connected?
 var displayConnected = false;
 
+// How many users are connected, including this display
+var connectedUsers = 0;
+
 // Monitor the internet connection to see if we are online
 function checkOnlineStatus() { 
   isOnline(function(err, online) {
@@ -35,6 +38,11 @@ function randomMovement() {
   }
   
   if (!displayConnected) {
+    return;
+  }
+  
+  // If there are real users connected dont display random stuff
+  if (connectedUsers > 1) {
     return;
   }
   
@@ -85,6 +93,10 @@ function init() {
   socket.on('connect', function(){
     console.log('A socket connection was made');
     socket.emit('display-connected', {}); 
+  });
+  
+  socket.on('client-count', function(data){
+    connectedUsers = data;
   });
   
   socket.on('new-data', function(data){
