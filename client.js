@@ -96,9 +96,11 @@ function init() {
           // Text message
         
           if (!isASCII(data.message)) {
+              socket.emit('display-msg', {msg:"Invalid message characters"});
               return;
           }
           if (data.message.length > 15) {
+            socket.emit('display-msg', {msg:"Message to long"});
             return;
           }
         
@@ -115,6 +117,7 @@ function init() {
         msg = '*E:' + data.x + ',' + data.y + '*';
         
       } else {
+          socket.emit('display-msg', {msg:"Unknown message"}); 
           return;
       }
     
