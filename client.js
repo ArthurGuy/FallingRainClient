@@ -93,18 +93,29 @@ function init() {
     
       // If we have received a text message validate the characters are in a suitable range
       if (data.type == 'M') {
+          // Text message
+        
           if (!isASCII(data.message)) {
               return;
           }
-        if (data.message.length > 15) {
-          return;
-        }
+          if (data.message.length > 15) {
+            return;
+          }
         
         msg = '*M:' + data.message + '*';
-      } elseif (data.type == 'S') {
+        
+      } else if (data.type == 'S') {
+        // Spark - falling rain
+        
         msg = '*S:' + data.x + ',' + data.y + '*';
-      } elseif (data.type == 'E') {
+        
+      } else if (data.type == 'E') {
+        // Explosion
+        
         msg = '*E:' + data.x + ',' + data.y + '*';
+        
+      } else {
+          return;
       }
     
       port.write(msg, function(err) {
