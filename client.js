@@ -88,7 +88,7 @@ function init() {
   });
   
   socket.on('new-data', function(data){
-      var msg = '*S:' + data.x + ',' + data.y + '*';
+      var msg = '*' + data.type + ':' + data.message + '*';
       port.write(msg, function(err) {
           if (err) {
               return console.log('Error on write: ', err.message);
