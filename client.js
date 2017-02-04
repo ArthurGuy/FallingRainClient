@@ -111,7 +111,7 @@ function init() {
               socket.emit('display-msg', {msg:"Invalid message characters"});
               return;
           }
-          if (data.message.length > 15) {
+          if (data.message.length > 25) {
             socket.emit('display-msg', {msg:"Message to long"});
             return;
           }
