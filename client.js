@@ -73,7 +73,7 @@ function init() {
       port.write('*S:6,0,' + getRandomIntInclusive(90, 140) + '*');
       port.write('*S:7,0,' + getRandomIntInclusive(90, 140) + '*');
     
-      port.write('*M:Connected*');
+      port.write('*M:100,Connected*');
 
       displayConnected = true;
     
@@ -107,6 +107,8 @@ function init() {
       if (data.type == 'M') {
           // Text message
         
+          // Validate the message doesnt contain any asterisk's
+        
           if (!isASCII(data.message)) {
               socket.emit('display-msg', {msg:"Invalid message characters"});
               return;
@@ -116,7 +118,7 @@ function init() {
             return;
           }
         
-        msg = '*M:' + data.message + '*';
+        msg = '*M:' + data.colour + ',' + data.message + '*';
         
       } else if (data.type == 'S') {
         // Spark - falling rain
