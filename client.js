@@ -47,11 +47,11 @@ function randomMovement() {
   }
   
   // Start a pixel falling on a random column
-  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
-  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0*');
+  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0,' + getRandomIntInclusive(90, 140) + '*');
+  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0,' + getRandomIntInclusive(90, 140) + '*');
   
   // Trigger an explosion on a random pixel
-  port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + '*');
+  port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + ',0*');
 }
 
 
@@ -64,14 +64,14 @@ function init() {
   port.on('open', function() {
       console.log('Serial port opened');
       //Display an animation when the system boots
-      port.write('*S:0,0*');
-      port.write('*S:1,0*');
-      port.write('*S:2,0*');
-      port.write('*S:3,0*');
-      port.write('*S:4,0*');
-      port.write('*S:5,0*');
-      port.write('*S:6,0*');
-      port.write('*S:7,0*');
+      port.write('*S:0,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:1,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:2,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:3,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:4,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:5,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:6,0,' + getRandomIntInclusive(90, 140) + '*');
+      port.write('*S:7,0,' + getRandomIntInclusive(90, 140) + '*');
     
       port.write('*M:Connected*');
 
@@ -121,12 +121,12 @@ function init() {
       } else if (data.type == 'S') {
         // Spark - falling rain
         
-        msg = '*S:' + data.x + ',' + data.y + '*';
+        msg = '*S:' + data.x + ',' + data.y + ',' + data.colour + '*';
         
       } else if (data.type == 'E') {
         // Explosion
         
-        msg = '*E:' + data.x + ',' + data.y + '*';
+        msg = '*E:' + data.x + ',' + data.y + ',' + data.colour + '*';
         
       } else {
           socket.emit('display-msg', {msg:"Unknown message"}); 
