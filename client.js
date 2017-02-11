@@ -51,7 +51,7 @@ function randomMovement() {
   port.write('*S:' + getRandomIntInclusive(0, 7) + ',0,' + getRandomIntInclusive(90, 140) + '*');
   
   // Trigger an explosion on a random pixel
-  port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + ',0*');
+  //port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + ',0*');
 }
 
 
