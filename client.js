@@ -130,6 +130,11 @@ function init() {
         
         msg = '*E:' + data.x + ',' + data.y + ',' + data.colour + '*';
         
+      } else if (data.type == 'C') {
+        // Clear the columns
+        
+        msg = '*C*';
+        
       } else {
           socket.emit('display-msg', {msg:"Unknown message"}); 
           return;
