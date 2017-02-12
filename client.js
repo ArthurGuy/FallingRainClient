@@ -15,6 +15,8 @@ var sendInProgress = false;
 var sentMessages = 0;
 var receivedOKs  = 0;
 
+var lastDisplayMessage;
+
 // Is the teensy connected?
 var displayConnected = false;
 
@@ -54,7 +56,6 @@ function randomMovement() {
   
   // Start a pixel falling on a random column
   port.write('*S:' + getRandomIntInclusive(0, 7) + ',0,' + getRandomIntInclusive(90, 140) + '*');
-  port.write('*S:' + getRandomIntInclusive(0, 7) + ',0,' + getRandomIntInclusive(90, 140) + '*');
   
   // Trigger an explosion on a random pixel
   //port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + ',0*');
@@ -63,8 +64,10 @@ function randomMovement() {
 function sendOnlineStatus() {
   setTimeout(sendOnlineStatus, 5000);
   
+  var missingMessages = sentMessages - receivedOKs;
+  
   // Emmit a hartbeat every 5 seconds so we know the display is online
-  socket.emit('display-heartbeat', {}); 
+  socket.emit('display-heartbeat', {missingMessages:missingMessages}); 
 }
 
 
@@ -103,9 +106,9 @@ function init() {
     displayConnected = false;
   });
   
-  // Listen for incomming data
+  // Listen for incomming serial data
   port.on('data', function (data) {
-    socket.emit('display-msg', {msg:"Received data", data:data});
+    lastDisplayMessage = new Date();
     receivedOKs++;
   });
   
