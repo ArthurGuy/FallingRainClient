@@ -54,11 +54,20 @@ function randomMovement() {
   //port.write('*E:' + getRandomIntInclusive(0, 7) + ',' + getRandomIntInclusive(0, 100) + ',0*');
 }
 
+function sendOnlineStatus() {
+  setTimeout(sendOnlineStatus, 5000);
+  
+  // Emmit a hartbeat every 5 seconds so we know the display is online
+  socket.emit('display-hartbeat', {}); 
+}
+
 
 function init() {
   checkOnlineStatus();
   
   randomMovement();
+  
+  sendOnlineStatus();
   
   // Connect to the serial port
   port.on('open', function() {
