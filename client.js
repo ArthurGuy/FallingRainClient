@@ -9,6 +9,9 @@ var port = new SerialPort("/dev/ttyAMA0", {
 // Are we connected to the internet?
 var systemOnline = false;
 
+// Are we waiting for a serial data send to complete
+var sendInProgress = false;
+
 // Is the teensy connected?
 var displayConnected = false;
 
@@ -73,16 +76,16 @@ function init() {
   port.on('open', function() {
       console.log('Serial port opened');
       //Display an animation when the system boots
-      port.write('*S:0,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:1,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:2,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:3,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:4,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:5,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:6,0,' + getRandomIntInclusive(90, 140) + '*');
-      port.write('*S:7,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:0,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:1,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:2,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:3,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:4,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:5,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:6,0,' + getRandomIntInclusive(90, 140) + '*');
+      sendSerial('*S:7,0,' + getRandomIntInclusive(90, 140) + '*');
     
-      port.write('*M:100,Connected*');
+      sendSerial('*M:100,Connected*');
 
       displayConnected = true;
     
@@ -95,6 +98,11 @@ function init() {
   port.on('error', function(err) {
     console.log('Error: ', err.message);
     displayConnected = false;
+  });
+  
+  // Listen for incomming data
+  port.on('data', function (data) {
+    socket.emit('display-msg', {msg:"Received data", data:data});
   });
   
   // Listen for websocket messages
@@ -171,4 +179,17 @@ function getRandomIntInclusive(min, max) {
 
 function isASCII(str) {
     return /^[\x00-\x7F]*$/.test(str);
+}
+
+function sendSerial (data) {
+  if (sendInProgress) {
+    socket.emit('display-msg', {msg:"Send in progress, skipping data", data:data});
+    return;
+  }
+  sendInProgress = true;
+  port.write(data, function () {
+    port.drain(function () {
+      sendInProgress = false;
+    });
+  });
 }
