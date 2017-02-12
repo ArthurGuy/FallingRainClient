@@ -12,6 +12,9 @@ var systemOnline = false;
 // Are we waiting for a serial data send to complete
 var sendInProgress = false;
 
+var sentMessages = 0;
+var receivedOKs  = 0;
+
 // Is the teensy connected?
 var displayConnected = false;
 
@@ -103,6 +106,7 @@ function init() {
   // Listen for incomming data
   port.on('data', function (data) {
     socket.emit('display-msg', {msg:"Received data", data:data});
+    receivedOKs++;
   });
   
   // Listen for websocket messages
@@ -157,13 +161,8 @@ function init() {
           return;
       }
     
-      port.write(msg, function(err) {
-          if (err) {
-              return console.log('Error on write: ', err.message);
-          }
-          //console.log('new pixel update sent');
-      });
-      console.log(data);
+      sendSerial(msg);
+      //console.log(data);
   });
   
 }
@@ -187,6 +186,7 @@ function sendSerial (data) {
     return;
   }
   sendInProgress = true;
+  sentMessages++;
   port.write(data, function () {
     port.drain(function () {
       sendInProgress = false;
