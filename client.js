@@ -12,9 +12,7 @@ var systemOnline = false;
 // Are we waiting for a serial data send to complete
 var sendInProgress = false;
 
-var sentMessages = 0;
-var receivedOKs  = 0;
-
+// The time the last message was received from the display
 var lastDisplayMessage;
 
 // Is the teensy connected?
@@ -64,10 +62,15 @@ function randomMovement() {
 function sendOnlineStatus() {
   setTimeout(sendOnlineStatus, 5000);
   
-  var missingMessages = sentMessages - receivedOKs;
+  var timeSinceLastUpdate = new Date() - lastDisplayMessage;
+  var screenProblem = false;
+  if (timeSinceLastUpdate > 1100) {
+    // Its been ove 1 second since the last message, there may be a problem with the screen
+    screenProblem = true;
+  }
   
   // Emmit a hartbeat every 5 seconds so we know the display is online
-  socket.emit('display-heartbeat', {missingMessages:missingMessages}); 
+  socket.emit('display-heartbeat', {timeSinceLastUpdate: timeSinceLastUpdate, screenProblem: screenProblem}); 
 }
 
 
@@ -109,7 +112,6 @@ function init() {
   // Listen for incomming serial data
   port.on('data', function (data) {
     lastDisplayMessage = new Date();
-    receivedOKs++;
   });
   
   // Listen for websocket messages
@@ -189,7 +191,6 @@ function sendSerial (data) {
     return;
   }
   sendInProgress = true;
-  sentMessages++;
   port.write(data, function () {
     port.drain(function () {
       sendInProgress = false;
