@@ -58,7 +58,7 @@ function sendOnlineStatus() {
   setTimeout(sendOnlineStatus, 5000);
   
   // Emmit a hartbeat every 5 seconds so we know the display is online
-  socket.emit('display-hartbeat', {}); 
+  socket.emit('display-heartbeat', {}); 
 }
 
 
